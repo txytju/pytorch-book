@@ -1,3 +1,6 @@
+chapter6-Coding-Guide/data/test1/
+chapter6-Coding-Guide/data/train/
+chapter6-Coding-Guide/data/test/
 .ipynb_checkpoints/
 .DS_Store
 dataset/

@@ -164,7 +164,7 @@ class DogCat(data.Dataset):
 
 关于数据集使用的注意事项，在上一章中已经提到，将文件读取等费时操作放在`__getitem__`函数中，利用多进程加速。避免一次性将所有图片都读进内存，不仅费时也会占用较大内存，而且不易进行数据增强等操作。另外在这里，我们将训练集中的30%作为验证集，可用来检查模型的训练效果，避免过拟合。在使用时，我们可通过dataloader加载数据。
 
-```
+```Python
 train_dataset = DogCat(opt.train_data_root, train=True)
 trainloader = DataLoader(train_dataset,
                         batch_size = opt.batch_size,
@@ -363,7 +363,7 @@ class DefaultConfig(object):
 
 这样我们在程序中就可以这样使用：
 
-```
+```python
 import models
 from config import DefaultConfig
 
@@ -375,7 +375,7 @@ dataset = DogCat(opt.train_data_root)
 
 这些都只是默认参数，在这里还提供了更新函数，根据字典更新配置参数。
 
-```
+```Python
 def parse(self, kwargs):
         """
         根据字典kwargs 更新 config参数
@@ -398,7 +398,7 @@ def parse(self, kwargs):
 
 例如：
 
-```
+```python
 opt = DefaultConfig()
 new_config = {'lr':0.1,'use_gpu':False}
 opt.parse(new_config)

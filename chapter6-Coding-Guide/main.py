@@ -11,11 +11,11 @@ from utils.visualize import Visualizer
 from tqdm import tqdm
 
 def test(**kwargs):
-    opt.parse(kwargs)
+    opt.parse(kwargs)  # use keywords to change default settings
     # import ipdb;
     # ipdb.set_trace()
     # configure model
-    model = getattr(models, opt.model)().eval()
+    model = getattr(models, opt.model)().eval()  # get a model
     if opt.load_model_path:
         model.load(opt.load_model_path)
     if opt.use_gpu: model.cuda()
