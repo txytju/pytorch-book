@@ -4,3 +4,6 @@ chapter6-Coding-Guide/data/test/
 .ipynb_checkpoints/
 .DS_Store
 dataset/
+
+chapter7-GAN/checkpoints/
+chapter7-GAN/data/

@@ -116,7 +116,7 @@ def train(**kwargs):
 
                 ## 尽可能把假图片判别为错误
                 noises.data.copy_(t.randn(opt.batch_size, opt.nz, 1, 1))
-                fake_img = netg(noises).detach()  # 根据噪声生成假图，同时截断梯度在 netg 中的反向传播
+                fake_img = netg(noises).detach()  # 根据噪声生成假图
                 output = netd(fake_img)
                 error_d_fake = criterion(output, fake_labels)
                 error_d_fake.backward()
@@ -149,6 +149,7 @@ def train(**kwargs):
 
         if epoch % opt.decay_every == 0:
             # 保存模型、图片
+            fix_fake_imgs = netg(fix_noises)
             tv.utils.save_image(fix_fake_imgs.data[:64], '%s/%s.png' % (opt.save_path, epoch), normalize=True,
                                 range=(-1, 1))
             t.save(netd.state_dict(), 'checkpoints/netd_%s.pth' % epoch)
@@ -166,12 +167,12 @@ def generate(**kwargs):
     for k_, v_ in kwargs.items():
         setattr(opt, k_, v_)
 
-    netg, netd = NetG(opt).eval(), NetD(opt).eval()  # use the models for eval not for training 
-    noises = t.randn(opt.gen_search_num, opt.nz, 1, 1).normal_(opt.gen_mean, opt.gen_std)  # 训练的时候用 batch_size，推测的时候使用的是一个想要的最大数量，然后从中选
+    netg, netd = NetG(opt).eval(), NetD(opt).eval()
+    noises = t.randn(opt.gen_search_num, opt.nz, 1, 1).normal_(opt.gen_mean, opt.gen_std)
     noises = Variable(noises, volatile=True)
 
-    map_location = lambda storage, loc: storage  # 将模型加载到 CPU 中
-    netd.load_state_dict(t.load(opt.netd_path, map_location=map_location)) # 都先加载进 CPU，后续如果机器上有 GPU 再将模型转移到 GPU，鲁棒性
+    map_location = lambda storage, loc: storage
+    netd.load_state_dict(t.load(opt.netd_path, map_location=map_location))
     netg.load_state_dict(t.load(opt.netg_path, map_location=map_location))
 
     if opt.gpu:
